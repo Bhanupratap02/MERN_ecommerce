@@ -17,7 +17,7 @@ import { listProductDetails } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 const ProductScreen = () => {
-  const [qty, setQty] = useState(0);
+  const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
   let navigate = useNavigate();
   let match = useParams();
