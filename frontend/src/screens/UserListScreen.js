@@ -7,7 +7,7 @@ import { Button, Col, Form, Row, Table } from "react-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { LinkContainer } from "react-router-bootstrap";
-import { listUsers } from "../actions/userActions";
+import { deleteUsers, listUsers } from "../actions/userActions";
 const UserListScreen = () => {
   const dispatch = useDispatch();
 
@@ -16,6 +16,9 @@ const UserListScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const userDelete = useSelector((state) => state.userDelete);
+  const { success:successDelete } = userDelete;
 const navigate = useNavigate()
   useEffect(() => {
       if(userInfo && userInfo.isAdmin){
@@ -24,9 +27,12 @@ const navigate = useNavigate()
           navigate("/login")
       }
     
-  }, [dispatch,navigate]);
+  }, [dispatch,navigate,successDelete,userInfo]);
    const deleteHandler = (id) =>{
-     console.log("delete")
+     if(window.confirm("Are you sure")){
+       dispatch(deleteUsers(id));
+     }
+   
    }
   return (
     <>
@@ -62,7 +68,7 @@ const navigate = useNavigate()
                   )}
                 </td>
                 <td>
-                    <LinkContainer to={`/users/${user._id}/edit`}>
+                    <LinkContainer to={`/admin/users/${user._id}/edit`}>
                    <Button variant="light"
                    className="btn-sm">
                       <i className="fas fa-edit"></i>

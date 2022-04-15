@@ -1,6 +1,9 @@
 /** @format */
 
 import {
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE__FAIL,
+  PRODUCT_DELETE__SUCCESS,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS__FAIL,
   PRODUCT_DETAILS__SUCCESS,
@@ -33,6 +36,23 @@ export const productDetailsReducer = (
       return { loading: false, product: action.payload };
     case PRODUCT_DETAILS__FAIL:
       return { loading:false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+
+export const productDeleteReducer = (
+  state = { product: { } },
+  action
+) => {
+  switch (action.type) {
+    case PRODUCT_DELETE_REQUEST:
+      return { loading: true};
+    case PRODUCT_DELETE__SUCCESS:
+      return { loading: false,success:true };
+    case PRODUCT_DELETE__FAIL:
+      return { loading: false, error: action.payload };
     default:
       return state;
   }

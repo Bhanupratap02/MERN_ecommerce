@@ -1,6 +1,9 @@
 /** @format */
 
 import {
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE__FAIL,
+  PRODUCT_DELETE__SUCCESS,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS__FAIL,
   PRODUCT_DETAILS__SUCCESS,
@@ -36,6 +39,37 @@ export const listProductDetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: PRODUCT_DETAILS__FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+
+export const deleteProduct = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_DELETE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+     await axios.delete(`/api/products/${id}`, config);
+    dispatch({
+      type: PRODUCT_DELETE__SUCCESS,
+      
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_DELETE__FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
