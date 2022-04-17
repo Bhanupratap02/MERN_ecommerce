@@ -1,6 +1,10 @@
 /** @format */
 
 import {
+  PRODUCT_CREATE_REQUEST,
+  PRODUCT_CREATE__FAIL,
+  PRODUCT_CREATE__RESET,
+  PRODUCT_CREATE__SUCCESS,
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE__FAIL,
   PRODUCT_DELETE__SUCCESS,
@@ -10,6 +14,10 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_UPDATE__FAIL,
+  PRODUCT_UPDATE__RESET,
+  PRODUCT_UPDATE__SUCCESS,
 } from "../constants/productConstants";
 
 export const productListReducer = (state = { products: [] }, action) => {
@@ -53,6 +61,36 @@ export const productDeleteReducer = (
       return { loading: false,success:true };
     case PRODUCT_DELETE__FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const productCreateReducer = (state = {} , action) => {
+  switch (action.type) {
+    case PRODUCT_CREATE_REQUEST:
+      return { loading: true };
+    case PRODUCT_CREATE__SUCCESS:
+      return { loading: false, success: true , product:action.payload};
+    case PRODUCT_CREATE__FAIL:
+      return { loading: false, error: action.payload };
+    case PRODUCT_CREATE__RESET:
+      return { };
+    default:
+      return state;
+  }
+};
+
+export const productUpdateReducer = (state = {product:{}}, action) => {
+  switch (action.type) {
+    case PRODUCT_UPDATE_REQUEST:
+      return { loading: true };
+    case PRODUCT_UPDATE__SUCCESS:
+      return { loading: false, success: true, product: action.payload };
+    case PRODUCT_UPDATE__FAIL:
+      return { loading: false, error: action.payload };
+    case PRODUCT_UPDATE__RESET:
+      return {product:{}};
     default:
       return state;
   }

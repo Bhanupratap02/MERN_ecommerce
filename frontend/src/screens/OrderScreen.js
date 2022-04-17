@@ -14,11 +14,11 @@ import {
   ListGroupItem,
   Row,
 } from "react-bootstrap";
-import { getOrderDetails, payOrder } from "../actions/orderActions";
+import { deliverOrder, getOrderDetails, payOrder } from "../actions/orderActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import axios from "axios";
-import { ORDER_PAY_RESET } from "../constants/orderConstants"
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from "../constants/orderConstants"
 
 const PlaceorderScreen = () => {
   const dispatch = useDispatch();
@@ -29,9 +29,18 @@ const PlaceorderScreen = () => {
 
   const { order, loading, error } = orderDetails;
 
+
+     const userLogin = useSelector((state) => state.userLogin);
+
+     const { userInfo } = userInfo;
+
   const orderPay = useSelector((state) => state.orderPay);
 
   const { loading: loadingPay, success: successPay } = orderPay;
+
+    const orderDeliver = useSelector((state) => state.orderDeliver);
+
+    const { loading: loadingDeliver, success: successDeliver} = orderDeliver;
 
   useEffect(() => {
     const addPayPalScript = async () => {
@@ -46,8 +55,9 @@ const PlaceorderScreen = () => {
       document.body.appendChild(script);
     };
 
-    if (!order || order._id !== orderId || successPay) {
+    if (!order || order._id !== orderId || successPay || successDeliver) {
       dispatch({type:ORDER_PAY_RESET})
+      dispatch({type:ORDER_DELIVER_RESET})
       dispatch(getOrderDetails(orderId));
     } else if (!order.paypal) {
       if (!window.paypal) {
@@ -56,7 +66,7 @@ const PlaceorderScreen = () => {
         setSdkReady(true);
       }
     }
-  }, [order, orderId, dispatch, order]);
+  }, [order, orderId, dispatch, order,successDeliver]);
   if (!loading) {
     // calculate prices
     const addDecimals = (num) => {
@@ -70,6 +80,11 @@ const PlaceorderScreen = () => {
     console.log(paymentResult)
     dispatch(payOrder(orderId,paymentResult))
    };
+    
+   const deliverHandler = () =>{
+     dispatch(deliverOrder(order))
+   }
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -188,6 +203,14 @@ const PlaceorderScreen = () => {
                       onSuccess={successPaymentHandler}
                     />
                   )}
+                </ListGroupItem>
+              )}
+              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroupItem>
+                  <Button type="button" className="btn btn-block"
+                  onClick={deliverHandler}>
+                    Mark As Deliver
+                  </Button>
                 </ListGroupItem>
               )}
             </ListGroup>
