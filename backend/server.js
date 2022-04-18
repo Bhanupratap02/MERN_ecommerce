@@ -2,6 +2,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import path from "path"
+import morgan from "morgan";
 import mongoose from "mongoose";
 import productRoutes from "./routes/productRoutes.js"
 import { errorHandler, notFound } from "./middlewares/errorMiddleware.js";
@@ -15,7 +16,9 @@ const app = express();
 
 //load middlewares
 app.use(express.json())
-
+if(process.env.NODE_ENV === "development"){
+   app.use(morgan("dev"))
+}
 
 
 //load routes

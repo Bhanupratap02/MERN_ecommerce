@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { PayPalButton } from "react-paypal-button-v2";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axiox from "axios";
 import {
@@ -32,7 +32,7 @@ const PlaceorderScreen = () => {
 
      const userLogin = useSelector((state) => state.userLogin);
 
-     const { userInfo } = userInfo;
+     const { userInfo } = userLogin;
 
   const orderPay = useSelector((state) => state.orderPay);
 
@@ -43,6 +43,9 @@ const PlaceorderScreen = () => {
     const { loading: loadingDeliver, success: successDeliver} = orderDeliver;
 
   useEffect(() => {
+    if(!userInfo){
+     Navigate("/login")
+    }
     const addPayPalScript = async () => {
       const { data: clientId } = await axios.get(`/api/config/paypal`);
       const script = document.createElement("script");
@@ -66,7 +69,7 @@ const PlaceorderScreen = () => {
         setSdkReady(true);
       }
     }
-  }, [order, orderId, dispatch, order,successDeliver]);
+  }, [order, orderId, dispatch, successDeliver,successPay]);
   if (!loading) {
     // calculate prices
     const addDecimals = (num) => {
@@ -112,7 +115,9 @@ const PlaceorderScreen = () => {
                 {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
-                <Message variant="success">Delivered On {order.paidAt}</Message>
+                <Message variant="success">
+                  Delivered On {order.paidAt}
+                </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
               )}
@@ -124,7 +129,9 @@ const PlaceorderScreen = () => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paid On {order.paidAt}</Message>
+                <Message variant="success">
+                  Paid On {order.paidAt.split("T")[0]}
+                </Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}
@@ -205,10 +212,13 @@ const PlaceorderScreen = () => {
                   )}
                 </ListGroupItem>
               )}
-              {userInfo.isAdmin && order.isPaid && !order.isDelivered && (
+              { userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
                 <ListGroupItem>
-                  <Button type="button" className="btn btn-block"
-                  onClick={deliverHandler}>
+                  <Button
+                    type="button"
+                    className="btn btn-block"
+                    onClick={deliverHandler}
+                  >
                     Mark As Deliver
                   </Button>
                 </ListGroupItem>

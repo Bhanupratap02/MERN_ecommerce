@@ -25,6 +25,7 @@ import {
   USER_UPDATE_BYADMIN_SUCCESS,
   USER_UPDATE_BYADMIN_FAIL,
   USER_UPDATE_BYADMIN_RESET,
+  USER_UPDATE_RESET,
 } from "../constants/userConstants";
 export const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
@@ -77,6 +78,8 @@ export const userUpdateProfileReducer = (state = {}, action) => {
       return { loading: false, success: true, userInfo: action.payload };
     case USER_UPDATE_FAIL:
       return { loading: false, error: action.payload };
+      case USER_UPDATE_RESET:
+        return{} 
     default:
       return state;
   }

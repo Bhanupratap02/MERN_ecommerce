@@ -20,6 +20,7 @@ import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import SearchBox from "./components/SearchBox";
 const App = (props) => {
   return (
     <Router>
@@ -28,6 +29,7 @@ const App = (props) => {
         <Container>
           <Routes>
             <Route path="/" element={<HomeScreen />} />
+            <Route path="/page/:pageNumber" element={<HomeScreen />} exact />
             <Route path="/product/:id" element={<ProductScreen {...props} />} />
             <Route path="/cart/:id" element={<CartScreen />} />
             <Route path="/cart" element={<CartScreen />} />
@@ -39,15 +41,19 @@ const App = (props) => {
             <Route path="/placeorder" element={<PlaceorderScreen />} />
             <Route path="/order/:id" element={<OrderScreen />} />
             <Route path="/admin/userlist" element={<UserListScreen />} />
-            <Route path="/admin/productlist" element={<ProductListScreen />} />
+            <Route path="/admin/productlist" element={<ProductListScreen />} exact />
+            <Route path="/admin/productlist/:pageNumber" element={<ProductListScreen />} exact/>
             <Route path="/admin/users/:id/edit" element={<UserEditScreen />} />
             <Route
               path="/admin/product/:id/edit"
               element={<ProductEditScreen />}
             />
+            <Route path="/admin/orderlist" element={<OrderListScreen />} />
+            <Route path="/search/:keyword" element={<HomeScreen />} exact />
             <Route
-              path="/admin/orderlist"
-              element={<OrderListScreen />}
+              path="/search/:keyword/page/:pageNumber"
+              element={<HomeScreen />}
+              exact
             />
           </Routes>
         </Container>

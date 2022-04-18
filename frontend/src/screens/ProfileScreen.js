@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { ListMyOrder } from "../actions/orderActions"
 import {LinkContainer} from "react-router-bootstrap"
+import { USER_UPDATE_RESET } from "../constants/userConstants"
 const ProfileScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +35,8 @@ const ProfileScreen = () => {
     if (!userInfo) {
       navigate("/login");
     }else{
-    if(!user.name){
+    if( !user ||!user.name || success){
+      dispatch({type:USER_UPDATE_RESET})
       dispatch(getUserDetails(`profile`))
       dispatch(ListMyOrder())
     }else{

@@ -9,12 +9,16 @@ import Loader from "../components/Loader";
 import { LinkContainer } from "react-router-bootstrap";
 import { createProduct, deleteProduct, listProducts } from "../actions/productActions";
 import { PRODUCT_CREATE__RESET } from "../constants/productConstants";
+import Paginate from "../components/Paginate"
 const ProductListScreen = () => {
   const dispatch = useDispatch();
   const match = useParams()
 const navigate = useNavigate();
+  
+const pageNumber = match.pageNumber || 1
+
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products ,page , pages } = productList;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -38,7 +42,7 @@ const navigate = useNavigate();
     if (successCreate) {
       navigate(`/admin/product/${createdProduct._id}/edit`);
     } else {
-      dispatch(listProducts());
+      dispatch(listProducts('',pageNumber));
     }
   }, [
     dispatch,
@@ -47,6 +51,7 @@ const navigate = useNavigate();
     successDelete,
     successCreate,
     createdProduct,
+    pageNumber
   ]);
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure")) {
@@ -77,6 +82,7 @@ const navigate = useNavigate();
       ) : error ? (
         <Message variant="danger">{error}</Message>
       ) : (
+        <>
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
@@ -114,6 +120,8 @@ const navigate = useNavigate();
             ))}
           </tbody>
         </Table>
+        <Paginate page={page} pages={pages} isAdmin={true}/>
+        </>
       )}
     </>
   );
