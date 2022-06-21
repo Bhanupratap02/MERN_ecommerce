@@ -14,7 +14,7 @@ const reviewSchema = mongoose.Schema(
       ref: "User",
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 const productSchema = mongoose.Schema(
@@ -44,7 +44,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    reviews:[reviewSchema],
+    reviews: [reviewSchema],
     rating: {
       type: Number,
       required: true,
@@ -67,7 +67,7 @@ const productSchema = mongoose.Schema(
     },
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 

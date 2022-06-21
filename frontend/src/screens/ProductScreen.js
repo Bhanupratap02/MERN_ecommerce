@@ -70,7 +70,7 @@ const ProductScreen = () => {
         <Message variant="danger">{error}</Message>
       ) : (
         <>
-        <Meta title={product.name} />
+          <Meta title={product.name} />
           <Row>
             <Col md={6}>
               <Image src={product.image} alt={product.name} fluid />
@@ -151,7 +151,7 @@ const ProductScreen = () => {
                   <ListGroupItem key={review._id}>
                     <strong>{review.name}</strong>
                     <Rating value={review.rating} />
-                    {/* <p>{review.createdAt}</p> */}
+                    <p>{review.createdAt.substring(0, 10)}</p>
                     <p>{review.comment}</p>
                   </ListGroupItem>
                 ))}

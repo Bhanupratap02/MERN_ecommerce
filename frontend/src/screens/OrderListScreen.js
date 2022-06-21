@@ -52,7 +52,7 @@ const OrderListScreen = () => {
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>{order.user && order.user.name}</td>
-                <td>{order.createdAt}</td>
+                <td>{order.createdAt.split("T")[0]}</td>
                 <td>{order.totalPrice}</td>
                 <td>
                   {order.isPaid ? (

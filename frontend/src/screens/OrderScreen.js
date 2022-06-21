@@ -116,7 +116,7 @@ const PlaceorderScreen = () => {
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered On {order.paidAt}
+                  Delivered On {order.deliveredAt.substring(0, 10)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -212,17 +212,20 @@ const PlaceorderScreen = () => {
                   )}
                 </ListGroupItem>
               )}
-              { userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered && (
-                <ListGroupItem>
-                  <Button
-                    type="button"
-                    className="btn btn-block"
-                    onClick={deliverHandler}
-                  >
-                    Mark As Deliver
-                  </Button>
-                </ListGroupItem>
-              )}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroupItem>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                    >
+                      Mark As Deliver
+                    </Button>
+                  </ListGroupItem>
+                )}
             </ListGroup>
           </Card>
         </Col>
